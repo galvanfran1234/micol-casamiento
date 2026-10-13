@@ -1,0 +1,1339 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boda Micol & Adriel | 19 de Diciembre</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="antialiased min-h-screen">
+    <!-- ------------------------------------------------------------------
+       1. ENVELOPE UNBOXING OVERLAY (Pantalla de Apertura de Sobre)
+       ------------------------------------------------------------------ -->
+    <div id="envelope-screen">
+      <div class="text-center mb-8 space-y-2 max-w-sm">
+        <p
+          class="font-serif-title text-xs tracking-widest uppercase text-stone-500"
+        >
+          Invitación Especial de Boda
+        </p>
+        <h2 class="font-script text-5xl text-[#7a4d32]">Micol &amp; Adriel</h2>
+        <p class="text-xs text-stone-500">
+          Toca el sobre o el sello para abrir tu invitación
+        </p>
+      </div>
+
+      <!-- Interactive Envelope Box -->
+      <div id="envelope-box" class="envelope-box" onclick="openEnvelope()">
+        <!-- Envelope Foliage Lining -->
+        <div class="envelope-lining">
+          <svg
+            class="w-full h-full opacity-40"
+            viewBox="0 0 300 130"
+            fill="none"
+          >
+            <path
+              d="M50 20 C70 5 90 25 110 10"
+              stroke="#8b7d6b"
+              stroke-width="1.2"
+            />
+            <path
+              d="M190 10 C210 25 230 5 250 20"
+              stroke="#8b7d6b"
+              stroke-width="1.2"
+            />
+            <circle cx="80" cy="25" r="4" fill="none" stroke="#8b7d6b" />
+            <circle cx="220" cy="25" r="4" fill="none" stroke="#8b7d6b" />
+          </svg>
+        </div>
+
+        <!-- Card peek preview -->
+        <div class="card-peek">
+          <span class="font-script text-3xl text-[#7a4d32]"
+            >Micol &amp; Adriel</span
+          >
+          <span
+            class="text-[10px] font-serif-title text-stone-500 uppercase tracking-widest mt-1"
+            >19 de Diciembre</span
+          >
+        </div>
+
+        <!-- Envelope Pocket Folds -->
+        <div class="envelope-pocket">
+          <div class="fold-left"></div>
+          <div class="fold-right"></div>
+          <div class="fold-bottom"></div>
+        </div>
+
+        <!-- Top Flap -->
+        <div class="envelope-flap-top"></div>
+
+        <!-- Wax Seal with Initial M & A -->
+        <div class="wax-seal">M&amp;A</div>
+      </div>
+
+      <button
+        onclick="openEnvelope()"
+        class="mt-8 px-6 py-2.5 bg-stone-800 text-stone-100 rounded-full text-xs font-semibold tracking-wider uppercase shadow-md hover:bg-stone-900 transition-all"
+      >
+        Abrir Invitación ✉️
+      </button>
+    </div>
+
+    <!-- ------------------------------------------------------------------
+       2. FLOATING MUSIC CONTROL WIDGET (DISCREET & EXPANDABLE VOLUME)
+       ------------------------------------------------------------------ -->
+    <audio
+      id="bg-music"
+      loop
+      src="./song/NARUTO%20-%20Sadness%20and%20Sorrow%20(Grand%20Piano%20Cover)%20+%20Sheet%20Music.mp3"
+      preload="auto"
+    ></audio>
+
+    <div id="music-widget" class="music-widget">
+      <!-- Popup Volume Slider Container -->
+      <div id="volume-popup" class="volume-popup">
+        <span class="text-[10px] text-stone-500 font-medium">Volumen</span>
+        <input
+          type="range"
+          id="volume-slider"
+          min="0"
+          max="1"
+          step="0.01"
+          value="0.5"
+          oninput="setVolume(this.value)"
+          title="Ajustar Volumen"
+          class="volume-slider"
+        />
+      </div>
+
+      <!-- Main Pill Control -->
+      <div class="music-pill">
+        <button
+          id="music-btn"
+          class="music-btn-icon"
+          onclick="toggleMusic()"
+          title="Reproducir / Pausar Música"
+        >
+          <span id="music-icon" class="text-sm">🎵</span>
+        </button>
+
+        <button
+          id="volume-btn"
+          onclick="toggleVolumePopup(event)"
+          title="Ajustar / Silenciar Volumen"
+          class="volume-toggle-btn"
+        >
+          <span id="volume-icon" class="text-xs">🔊</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ------------------------------------------------------------------
+       3. MAIN INVITATION PAGE CONTENT
+       ------------------------------------------------------------------ -->
+    <div class="max-w-4xl mx-auto px-4 py-8 md:py-14 space-y-16">
+      <!-- HERO HEADER -->
+      <header class="text-center space-y-3">
+        <span
+          class="inline-block px-3 py-1 rounded-full bg-stone-200/70 text-stone-600 text-xs font-medium tracking-widest uppercase"
+        >
+          Invitación Oficial de Boda
+        </span>
+        <h1
+          class="font-script text-6xl md:text-8xl text-[#7a4d32] leading-tight"
+        >
+          Micol &amp; Adriel
+        </h1>
+        <p class="font-serif-title text-base md:text-lg text-stone-600 italic">
+          Deseamos compartir con ustedes la alegría de nuestro casamiento
+        </p>
+      </header>
+
+      <!-- ------------------------------------------------------------------
+         4. INTERACTIVE 3D INVITATION CARD (Exact Match to Image 2)
+         ------------------------------------------------------------------ -->
+      <section class="flex flex-col items-center">
+        <!-- Card Flip Controls Header -->
+        <div
+          class="flex items-center gap-2 mb-4 bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full border border-stone-200 shadow-sm text-xs text-stone-600"
+        >
+          <span>Toca la tarjeta o el botón para ver la vista ampliada</span>
+          <button
+            onclick="toggleCardFlip()"
+            class="ml-2 font-bold text-[#7a4d32] hover:text-stone-950 underline underline-offset-2"
+          >
+            Girar Tarjeta 360° ↺
+          </button>
+        </div>
+
+        <!-- 3D Flippable Card Stage -->
+        <div
+          class="perspective-1000 w-full max-w-sm sm:max-w-md h-[580px] sm:h-[630px] relative"
+        >
+          <div
+            id="card-3d"
+            class="preserve-3d w-full h-full relative cursor-pointer shadow-2xl rounded-2xl"
+            onclick="toggleCardFlip()"
+          >
+            <!-- -------------------------------------------------
+               CARD FRONT (EXACT RECREATION OF USER IMAGE 2)
+               ------------------------------------------------- -->
+            <div
+              class="card-face-front backface-hidden absolute inset-0 bg-[#fbf9f4] rounded-2xl p-6 sm:p-8 border border-stone-200/90 flex flex-col justify-between items-center text-center select-none overflow-hidden shadow-inner"
+            >
+              <!-- TOP FLORAL LINE ARTWORK (Recreating Image 2 Top Flowers) -->
+              <div
+                class="w-full h-24 absolute top-0 left-0 right-0 pointer-events-none p-2 flex justify-between items-start opacity-70"
+              >
+                <!-- Left Top Flower Group -->
+                <svg
+                  class="w-32 h-20 text-[#8b7d6b]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <!-- Flower 1 -->
+                  <circle cx="35" cy="15" r="8" stroke-width="1" />
+                  <path
+                    d="M35 7 Q40 0 45 7 Q50 15 42 18 Q35 22 28 18 Q20 15 25 7 Q30 0 35 7 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                  <!-- Flower 2 -->
+                  <circle cx="75" cy="20" r="10" stroke-width="1" />
+                  <!-- Leaves -->
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.9"
+                    fill="none"
+                  />
+                  <path
+                    d="M55 35 C45 25 50 10 65 20 Z"
+                    stroke-width="0.9"
+                    fill="none"
+                  />
+                </svg>
+
+                <!-- Right Top Flower Group (Flipped) -->
+                <svg
+                  class="w-32 h-20 text-[#8b7d6b] transform scale-x-[-1]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <circle cx="35" cy="15" r="8" stroke-width="1" />
+                  <path
+                    d="M35 7 Q40 0 45 7 Q50 15 42 18 Q35 22 28 18 Q20 15 25 7 Q30 0 35 7 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                  <circle cx="75" cy="20" r="10" stroke-width="1" />
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.9"
+                    fill="none"
+                  />
+                  <path
+                    d="M55 35 C45 25 50 10 65 20 Z"
+                    stroke-width="0.9"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+
+              <div class="h-12"></div>
+
+              <!-- NAMES & DATE (Centered Layout) -->
+              <div class="my-auto space-y-5 w-full px-4 text-center">
+                <h2
+                  class="font-script text-6xl sm:text-7xl text-[#7a4d32] leading-tight"
+                >
+                  Micol &amp; Adriel
+                </h2>
+
+                <p
+                  class="text-xs sm:text-sm font-serif-title text-stone-600 tracking-wider leading-relaxed italic max-w-xs mx-auto"
+                >
+                  Deseamos compartir con ustedes la alegría de nuestro
+                  casamiento
+                </p>
+
+                <div
+                  class="w-full max-w-[200px] h-px bg-stone-300/80 mx-auto my-4"
+                ></div>
+
+                <!-- DATE GRID LAYOUT (SÁBADO | 19 | DICIEMBRE) -->
+                <div
+                  class="flex items-center justify-center space-x-3 sm:space-x-4 text-stone-700 py-2"
+                >
+                  <span
+                    class="font-serif-title text-xs sm:text-sm tracking-[0.2em] uppercase font-medium"
+                    >SÁBADO</span
+                  >
+                  <span class="text-stone-300 font-light text-xl">|</span>
+                  <span
+                    class="font-serif-title text-4xl sm:text-5xl font-normal text-[#7a4d32] px-1"
+                    >19</span
+                  >
+                  <span class="text-stone-300 font-light text-xl">|</span>
+                  <span
+                    class="font-serif-title text-xs sm:text-sm tracking-[0.2em] uppercase font-medium"
+                    >DICIEMBRE</span
+                  >
+                </div>
+              </div>
+
+              <!-- BOTTOM FLORAL LINE ARTWORK (Recreating Image 2 Bottom Flowers) -->
+              <div
+                class="w-full h-24 relative pointer-events-none p-2 flex justify-between items-end opacity-70 mt-auto"
+              >
+                <!-- Left Bottom Flowers -->
+                <svg
+                  class="w-32 h-20 text-[#8b7d6b] transform scale-y-[-1]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <circle cx="35" cy="15" r="8" stroke-width="1" />
+                  <path
+                    d="M35 7 Q40 0 45 7 Q50 15 42 18 Q35 22 28 18 Q20 15 25 7 Q30 0 35 7 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                  <circle cx="75" cy="20" r="10" stroke-width="1" />
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.9"
+                    fill="none"
+                  />
+                </svg>
+
+                <!-- Right Bottom Flowers -->
+                <svg
+                  class="w-32 h-20 text-[#8b7d6b] transform scale-x-[-1] scale-y-[-1]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <circle cx="35" cy="15" r="8" stroke-width="1" />
+                  <path
+                    d="M35 7 Q40 0 45 7 Q50 15 42 18 Q35 22 28 18 Q20 15 25 7 Q30 0 35 7 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                  <circle cx="75" cy="20" r="10" stroke-width="1" />
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.9"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+
+              <div class="absolute bottom-2 right-3 text-[10px] text-stone-400">
+                Girar ↺
+              </div>
+            </div>
+
+            <!-- -------------------------------------------------
+               CARD BACK (Interactive Extended Info & Maps)
+               ------------------------------------------------- -->
+            <div
+              class="card-face-back rotate-y-180 backface-hidden absolute inset-0 bg-[#fdfbf7] rounded-2xl p-5 sm:p-7 border border-stone-200/90 flex flex-col justify-between items-center text-center select-none overflow-hidden shadow-inner"
+            >
+              <!-- TOP FLORAL CORNERS ARTWORK -->
+              <div
+                class="w-full h-20 absolute top-0 left-0 right-0 pointer-events-none p-2 flex justify-between items-start opacity-50"
+              >
+                <svg
+                  class="w-28 h-16 text-[#8b7d6b]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <circle cx="35" cy="15" r="7" stroke-width="1" />
+                  <circle cx="75" cy="20" r="9" stroke-width="1" />
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                  <path
+                    d="M55 35 C45 25 50 10 65 20 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                </svg>
+                <svg
+                  class="w-28 h-16 text-[#8b7d6b] transform scale-x-[-1]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <circle cx="35" cy="15" r="7" stroke-width="1" />
+                  <circle cx="75" cy="20" r="9" stroke-width="1" />
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                  <path
+                    d="M55 35 C45 25 50 10 65 20 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+
+              <!-- HEADER -->
+              <div class="w-full text-center space-y-1 pt-1 relative z-10">
+                <span
+                  class="text-[10px] sm:text-xs uppercase font-serif-title tracking-[0.25em] text-stone-500 font-semibold"
+                  >Información del Evento</span
+                >
+                <h3
+                  class="font-script text-4xl sm:text-5xl text-[#7a4d32] leading-tight"
+                >
+                  Micol &amp; Adriel
+                </h3>
+                <p
+                  class="text-xs sm:text-sm font-serif-title font-semibold text-stone-700 uppercase tracking-widest"
+                >
+                  Sábado 19 de Diciembre
+                </p>
+                <div
+                  class="w-16 h-0.5 bg-[#c89269]/40 mx-auto mt-1 rounded-full"
+                ></div>
+              </div>
+
+              <!-- EVENT LOCATIONS & DETAILS -->
+              <div class="w-full space-y-3 px-1 sm:px-2 relative z-10">
+                <!-- Location 1: Ceremonia Religiosa -->
+                <div
+                  class="bg-stone-50/90 hover:bg-stone-50 p-3 sm:p-3.5 rounded-xl border border-stone-200/90 text-left space-y-1.5 shadow-sm transition-colors"
+                >
+                  <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm select-none">⛪</span>
+                      <span class="font-bold text-stone-800 text-xs sm:text-sm"
+                        >Ceremonia Religiosa</span
+                      >
+                    </div>
+                    <span
+                      class="text-xs font-bold text-[#7a4d32] bg-amber-100/90 px-2 py-0.5 rounded-md"
+                      >19:30 hs</span
+                    >
+                  </div>
+                  <p class="text-xs font-semibold text-stone-700">
+                    Iglesia Virgen de las Flores
+                  </p>
+                  <p class="text-[11px] sm:text-xs text-stone-500">
+                    Juez de la Gándara 850, Morón
+                  </p>
+                  <div class="pt-0.5">
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Iglesia+Juez+de+la+Gandara+850,+Libertad,+Buenos+Aires"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onclick="
+                        openGoogleMap(
+                          'https://www.google.com/maps/search/?api=1&query=Iglesia+Juez+de+la+Gandara+850,+Libertad,+Buenos+Aires',
+                          event,
+                        )
+                      "
+                      class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-[11px] font-semibold text-[#7a4d32] hover:text-[#502c17] transition-all cursor-pointer shadow-xs"
+                    >
+                      <span>📍 Ver en Google Maps</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Location 2: Recepción & Fiesta -->
+                <div
+                  class="bg-stone-50/90 hover:bg-stone-50 p-3 sm:p-3.5 rounded-xl border border-stone-200/90 text-left space-y-1.5 shadow-sm transition-colors"
+                >
+                  <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-sm select-none">🥂</span>
+                      <span class="font-bold text-stone-800 text-xs sm:text-sm"
+                        >Recepción &amp; Fiesta</span
+                      >
+                    </div>
+                    <span
+                      class="text-xs font-bold text-[#7a4d32] bg-amber-100/90 px-2 py-0.5 rounded-md"
+                      >21:30 hs</span
+                    >
+                  </div>
+                  <p class="text-xs font-semibold text-stone-700">
+                    Quinta de Celebración
+                  </p>
+                  <p class="text-[11px] sm:text-xs text-stone-500">
+                    Belisario Roldán 911, Libertad
+                  </p>
+                  <div class="pt-0.5">
+                    <a
+                      href="https://www.google.com/maps/search/?api=1&query=Belisario+Roldan+911,+Libertad,+Buenos+Aires"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onclick="
+                        openGoogleMap(
+                          'https://www.google.com/maps/search/?api=1&query=Belisario+Roldan+911,+Libertad,+Buenos+Aires',
+                          event,
+                        )
+                      "
+                      class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-[11px] font-semibold text-[#7a4d32] hover:text-[#502c17] transition-all cursor-pointer shadow-xs"
+                    >
+                      <span>📍 Ver en Google Maps</span>
+                      <span>→</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- KEY NOTES (Chips decorativos con info del evento) -->
+              <div
+                class="w-full grid grid-cols-3 gap-2 px-1 text-center relative z-10"
+              >
+                <div
+                  class="bg-[#fcf8f3] rounded-lg p-2 border border-amber-900/10"
+                >
+                  <span class="block text-xs">👔</span>
+                  <span
+                    class="text-[10px] font-bold text-stone-700 block uppercase tracking-wider"
+                    >Dress Code</span
+                  >
+                  <span class="text-[10px] text-stone-500 font-serif-title"
+                    >Semi-Formal</span
+                  >
+                </div>
+                <div
+                  class="bg-[#fcf8f3] rounded-lg p-2 border border-amber-900/10"
+                >
+                  <span class="block text-xs">⏰</span>
+                  <span
+                    class="text-[10px] font-bold text-stone-700 block uppercase tracking-wider"
+                    >Horario</span
+                  >
+                  <span class="text-[10px] text-stone-500 font-serif-title"
+                    >19:30 hs</span
+                  >
+                </div>
+                <div
+                  class="bg-[#fcf8f3] rounded-lg p-2 border border-amber-900/10"
+                >
+                  <span class="block text-xs">💌</span>
+                  <span
+                    class="text-[10px] font-bold text-stone-700 block uppercase tracking-wider"
+                    >Confirmar</span
+                  >
+                  <span class="text-[10px] text-stone-500 font-serif-title"
+                    >Antes 05/12</span
+                  >
+                </div>
+              </div>
+
+              <!-- FOOTER MESSAGE -->
+              <div
+                class="w-full pt-2 border-t border-stone-200 text-center relative z-10 space-y-1"
+              >
+                <p
+                  class="text-[11px] font-serif-title text-[#7a4d32] font-semibold"
+                >
+                  ¡Los esperamos con mucha ilusión para celebrar juntos!
+                </p>
+              </div>
+
+              <!-- BOTTOM FLORAL CORNERS ARTWORK -->
+              <div
+                class="w-full h-16 absolute bottom-0 left-0 right-0 pointer-events-none p-2 flex justify-between items-end opacity-40"
+              >
+                <svg
+                  class="w-24 h-14 text-[#8b7d6b] transform scale-y-[-1]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <circle cx="35" cy="15" r="7" stroke-width="1" />
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                </svg>
+                <svg
+                  class="w-24 h-14 text-[#8b7d6b] transform scale-x-[-1] scale-y-[-1]"
+                  viewBox="0 0 120 80"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path d="M20 20 Q40 5 60 25 T100 20" stroke-width="1.2" />
+                  <circle cx="35" cy="15" r="7" stroke-width="1" />
+                  <path
+                    d="M15 35 C5 25 10 10 25 20 Z"
+                    stroke-width="0.8"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+
+              <div
+                class="absolute bottom-2 right-3 text-[10px] text-stone-400 z-20 flex items-center gap-1 select-none pointer-events-none"
+              >
+                <span>Girar</span>
+                <span>↺</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+         5. COUNTDOWN TIMER & ADD TO CALENDAR
+         ------------------------------------------------------------------ -->
+      <section
+        class="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-stone-200/80 shadow-sm text-center space-y-6"
+      >
+        <div class="space-y-1">
+          <span
+            class="text-xs font-medium text-[#7a4d32] uppercase tracking-widest"
+            >Cuenta Regresiva</span
+          >
+          <h3 class="font-serif-title text-2xl font-bold text-stone-800">
+            Faltan Muy Pocos Días para la Boda
+          </h3>
+        </div>
+
+        <!-- Timer Blocks -->
+        <div class="grid grid-cols-4 gap-3 max-w-md mx-auto">
+          <div class="bg-stone-50 rounded-2xl p-3 border border-stone-200">
+            <span
+              id="cd-days"
+              class="font-serif-title text-3xl sm:text-4xl font-bold text-[#7a4d32]"
+              >00</span
+            >
+            <span
+              class="block text-[10px] uppercase tracking-wider text-stone-500 mt-1"
+              >Días</span
+            >
+          </div>
+          <div class="bg-stone-50 rounded-2xl p-3 border border-stone-200">
+            <span
+              id="cd-hours"
+              class="font-serif-title text-3xl sm:text-4xl font-bold text-[#7a4d32]"
+              >00</span
+            >
+            <span
+              class="block text-[10px] uppercase tracking-wider text-stone-500 mt-1"
+              >Horas</span
+            >
+          </div>
+          <div class="bg-stone-50 rounded-2xl p-3 border border-stone-200">
+            <span
+              id="cd-minutes"
+              class="font-serif-title text-3xl sm:text-4xl font-bold text-[#7a4d32]"
+              >00</span
+            >
+            <span
+              class="block text-[10px] uppercase tracking-wider text-stone-500 mt-1"
+              >Min</span
+            >
+          </div>
+          <div class="bg-stone-50 rounded-2xl p-3 border border-stone-200">
+            <span
+              id="cd-seconds"
+              class="font-serif-title text-3xl sm:text-4xl font-bold text-[#7a4d32]"
+              >00</span
+            >
+            <span
+              class="block text-[10px] uppercase tracking-wider text-stone-500 mt-1"
+              >Seg</span
+            >
+          </div>
+        </div>
+
+        <!-- Add to Google Calendar Button -->
+        <div>
+          <button
+            onclick="addToGoogleCalendar()"
+            class="inline-flex items-center space-x-2 px-6 py-2.5 bg-stone-800 hover:bg-stone-900 text-white rounded-full text-xs font-semibold tracking-wider transition-all shadow hover:shadow-md"
+          >
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path
+                d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
+              />
+            </svg>
+            <span>Agregar a mi Google Calendar</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+         6. ITINERARIO & PROGRAMA DEL DÍA
+         ------------------------------------------------------------------ -->
+      <section class="space-y-8">
+        <div class="text-center space-y-1">
+          <span
+            class="text-xs font-medium text-[#7a4d32] uppercase tracking-widest"
+            >Sábado 19 de Diciembre</span
+          >
+          <h3 class="font-serif-title text-3xl font-bold text-stone-800">
+            Cronograma del Evento
+          </h3>
+        </div>
+
+        <div
+          class="relative max-w-xl mx-auto space-y-6 before:absolute before:inset-0 before:left-1/2 before:-translate-x-1/2 before:w-0.5 before:bg-stone-200"
+        >
+          <!-- Event 1: Ceremonia -->
+          <div class="relative flex items-center justify-between gap-4">
+            <div class="w-1/2 text-right pr-4">
+              <span
+                class="text-xs font-bold text-[#7a4d32] bg-amber-100 px-2.5 py-0.5 rounded-full"
+                >19:30 HS</span
+              >
+              <h4
+                class="font-serif-title text-lg font-bold text-stone-800 mt-1"
+              >
+                Ceremonia Religiosa
+              </h4>
+              <p class="text-xs text-stone-500">
+                Iglesia Virgen de las Flores - Juez de la Gandara 850
+              </p>
+            </div>
+            <div
+              class="w-8 h-8 rounded-full bg-stone-800 text-white flex items-center justify-center text-xs font-bold z-10 shrink-0 shadow"
+            >
+              ⛪
+            </div>
+            <div class="w-1/2 pl-4 text-xs text-stone-500">
+              Puntualidad en la llegada de los invitados.
+            </div>
+          </div>
+
+          <!-- Event 2: Fiesta -->
+          <div class="relative flex items-center justify-between gap-4">
+            <div class="w-1/2 text-right pr-4 text-xs text-stone-500">
+              Recepción, brinda por los novios, cena y baile.
+            </div>
+            <div
+              class="w-8 h-8 rounded-full bg-[#7a4d32] text-white flex items-center justify-center text-xs font-bold z-10 shrink-0 shadow"
+            >
+              🥂
+            </div>
+            <div class="w-1/2 pl-4">
+              <span
+                class="text-xs font-bold text-[#7a4d32] bg-amber-100 px-2.5 py-0.5 rounded-full"
+                >21:30 HS</span
+              >
+              <h4
+                class="font-serif-title text-lg font-bold text-stone-800 mt-1"
+              >
+                Fiesta &amp; Salón
+              </h4>
+              <p class="text-xs text-stone-500">
+                Belisario Roldan 911, Libertad
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+         7. UBICACIONES & CÓMO LLEGAR
+         ------------------------------------------------------------------ -->
+      <section class="space-y-8">
+        <div class="text-center space-y-1">
+          <span
+            class="text-xs font-medium text-[#7a4d32] uppercase tracking-widest"
+            >Ubicaciones</span
+          >
+          <h3 class="font-serif-title text-3xl font-bold text-stone-800">
+            ¿Cómo Llegar?
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Location 1: Iglesia -->
+          <div
+            class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm space-y-4"
+          >
+            <div class="flex items-center space-x-3">
+              <div class="p-3 bg-stone-100 rounded-xl text-stone-700">⛪</div>
+              <div>
+                <h4 class="font-serif-title text-xl font-bold text-stone-800">
+                  Iglesia Virgen de las Flores
+                </h4>
+                <p class="text-xs text-stone-500">
+                  Ceremonia Religiosa (19:30 hs)
+                </p>
+              </div>
+            </div>
+            <p class="text-xs text-stone-600">Juez de la Gandara 850, Moron</p>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Iglesia+Juez+de+la+Gandara+850,+Libertad,+Buenos+Aires"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="
+                openGoogleMap(
+                  'https://www.google.com/maps/search/?api=1&query=Iglesia+Juez+de+la+Gandara+850,+Libertad,+Buenos+Aires',
+                  event,
+                )
+              "
+              class="inline-flex items-center space-x-2 text-xs font-semibold text-[#7a4d32] hover:text-stone-950 cursor-pointer"
+            >
+              <span>Abrir en Google Maps</span>
+              <span>→</span>
+            </a>
+          </div>
+
+          <!-- Location 2: Reception -->
+          <div
+            class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm space-y-4"
+          >
+            <div class="flex items-center space-x-3">
+              <div class="p-3 bg-amber-100 rounded-xl text-[#7a4d32]">🎉</div>
+              <div>
+                <h4 class="font-serif-title text-xl font-bold text-stone-800">
+                  Belisario Roldan 911
+                </h4>
+                <p class="text-xs text-stone-500">
+                  Fiesta &amp; Recepción (21:30 hs)
+                </p>
+              </div>
+            </div>
+            <p class="text-xs text-stone-600">Belisario Roldan 911, Libertad</p>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Belisario+Roldan+911,+Libertad,+Buenos+Aires"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="
+                openGoogleMap(
+                  'https://www.google.com/maps/search/?api=1&query=Belisario+Roldan+911,+Libertad,+Buenos+Aires',
+                  event,
+                )
+              "
+              class="inline-flex items-center space-x-2 text-xs font-semibold text-[#7a4d32] hover:text-stone-950 cursor-pointer"
+            >
+              <span>Abrir en Google Maps</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+         8. DRESS CODE
+         ------------------------------------------------------------------ -->
+      <section class="max-w-2xl mx-auto w-full">
+        <div
+          class="relative bg-white rounded-3xl border border-stone-200/90 shadow-xl overflow-hidden p-6 sm:p-10 text-stone-800"
+        >
+          <!-- TOP FOLIAGE ARTWORK (Eucalyptus Green Leaves SVG) -->
+          <div
+            class="absolute top-0 left-0 right-0 h-24 pointer-events-none overflow-hidden opacity-85"
+          >
+            <svg
+              class="w-full h-full"
+              viewBox="0 0 600 100"
+              preserveAspectRatio="none"
+              fill="none"
+            >
+              <!-- Left Foliage Branch -->
+              <g
+                stroke="#4a6b5d"
+                stroke-width="1.2"
+                fill="#6b8e73"
+                fill-opacity="0.45"
+              >
+                <path
+                  d="M-10 -10 Q50 30 120 15 T250 10"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M15 8 C25 -5 45 0 35 15 C25 30 5 20 15 8 Z"
+                  fill="#88a890"
+                />
+                <path
+                  d="M45 18 C60 5 80 12 70 28 C60 42 35 30 45 18 Z"
+                  fill="#527563"
+                />
+                <path
+                  d="M85 15 C100 0 120 8 110 25 C100 40 75 28 85 15 Z"
+                  fill="#7fa187"
+                />
+                <path
+                  d="M130 12 C145 -3 165 5 155 22 C145 38 120 25 130 12 Z"
+                  fill="#9bbba3"
+                />
+              </g>
+              <!-- Right Foliage Branch -->
+              <g
+                stroke="#4a6b5d"
+                stroke-width="1.2"
+                fill="#6b8e73"
+                fill-opacity="0.45"
+                transform="scale(-1, 1) translate(-600, 0)"
+              >
+                <path
+                  d="M-10 -10 Q50 30 120 15 T250 10"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M15 8 C25 -5 45 0 35 15 C25 30 5 20 15 8 Z"
+                  fill="#88a890"
+                />
+                <path
+                  d="M45 18 C60 5 80 12 70 28 C60 42 35 30 45 18 Z"
+                  fill="#527563"
+                />
+                <path
+                  d="M85 15 C100 0 120 8 110 25 C100 40 75 28 85 15 Z"
+                  fill="#7fa187"
+                />
+                <path
+                  d="M130 12 C145 -3 165 5 155 22 C145 38 120 25 130 12 Z"
+                  fill="#9bbba3"
+                />
+              </g>
+            </svg>
+          </div>
+
+          <!-- CARD CONTENT -->
+          <div class="relative z-10 pt-10 pb-6 space-y-8">
+            <!-- Header Title -->
+            <div class="text-center space-y-1">
+              <p
+                class="font-serif-title text-stone-700 tracking-[0.25em] uppercase text-xs sm:text-sm font-semibold"
+              >
+                Código de Vestimenta
+              </p>
+              <h2
+                class="font-serif-title text-3xl sm:text-5xl font-light text-[#2d4a3e] tracking-wider uppercase"
+              >
+                Semi-Formal
+              </h2>
+            </div>
+
+            <!-- Two Columns: Ellos / Ellas -->
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0 md:divide-x md:divide-stone-200"
+            >
+              <!-- Column 1: ELLOS -->
+              <div
+                class="flex flex-col justify-between space-y-4 md:pr-8 h-full"
+              >
+                <div class="space-y-4">
+                  <h3
+                    class="font-serif-title text-center text-lg sm:text-xl font-bold tracking-widest text-stone-900 uppercase border-b border-stone-100 pb-2 md:border-none md:pb-0"
+                  >
+                    Ellos
+                  </h3>
+                  <ul
+                    class="text-xs sm:text-sm text-stone-700 space-y-2 leading-relaxed"
+                  >
+                    <li>Traje, pantalón de vestir o jean negro con camisa.</li>
+                    <li>Corbata opcional.</li>
+                    <li>Zapatos o zapatillas de vestir.</li>
+                  </ul>
+                </div>
+
+                <div
+                  class="pt-3 flex items-start gap-2 text-xs sm:text-sm text-stone-700 mt-auto"
+                >
+                  <span class="text-rose-500 text-base leading-none select-none"
+                    >🚫</span
+                  >
+                  <p class="leading-snug">
+                    <strong class="font-semibold text-stone-900"
+                      >No se permiten:</strong
+                    >
+                    Jeans azules, zapatillas deportivas, remeras o ropa
+                    demasiado informal.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Column 2: ELLAS -->
+              <div
+                class="flex flex-col justify-between space-y-4 md:pl-8 h-full"
+              >
+                <div class="space-y-4">
+                  <h3
+                    class="font-serif-title text-center text-lg sm:text-xl font-bold tracking-widest text-stone-900 uppercase border-b border-stone-100 pb-2 md:border-none md:pb-0"
+                  >
+                    Ellas
+                  </h3>
+                  <ul
+                    class="text-xs sm:text-sm text-stone-700 space-y-2 leading-relaxed"
+                  >
+                    <li>Vestidos largos, midi o cortos elegantes.</li>
+                    <li>
+                      Monos o conjuntos de pantalón de vestir y blusa
+                      sofisticada.
+                    </li>
+                    <li>
+                      Calzado formal (tacones, sandalias elegantes o zapatos de
+                      fiesta).
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  class="pt-3 flex items-start gap-2 text-xs sm:text-sm text-stone-700 mt-auto"
+                >
+                  <span class="text-rose-500 text-base leading-none select-none"
+                    >🚫</span
+                  >
+                  <p class="leading-snug">
+                    <strong class="font-semibold text-stone-900"
+                      >No se permiten:</strong
+                    >
+                    Shorts, ropa excesivamente casual o deportiva.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Message & Note -->
+            <div
+              class="pt-6 border-t border-stone-100 text-center space-y-2 max-w-lg mx-auto"
+            >
+              <p
+                class="font-serif-title text-sm sm:text-base text-stone-800 font-medium leading-snug"
+              >
+                <li>EVITAR EL USO DE COLORES BLANCOS O SIMILARES Y ROJO.</li>
+              </p>
+              <p
+                class="text-[11px] sm:text-xs text-stone-500/90 max-w-sm mx-auto leading-relaxed italic"
+              ></p>
+            </div>
+          </div>
+
+          <!-- BOTTOM FOLIAGE ARTWORK (Eucalyptus Green Leaves SVG) -->
+          <div
+            class="absolute bottom-0 left-0 right-0 h-24 pointer-events-none overflow-hidden opacity-85 transform scale-y-[-1]"
+          >
+            <svg
+              class="w-full h-full"
+              viewBox="0 0 600 100"
+              preserveAspectRatio="none"
+              fill="none"
+            >
+              <!-- Left Foliage Branch -->
+              <g
+                stroke="#4a6b5d"
+                stroke-width="1.2"
+                fill="#6b8e73"
+                fill-opacity="0.45"
+              >
+                <path
+                  d="M-10 -10 Q50 30 120 15 T250 10"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M15 8 C25 -5 45 0 35 15 C25 30 5 20 15 8 Z"
+                  fill="#88a890"
+                />
+                <path
+                  d="M45 18 C60 5 80 12 70 28 C60 42 35 30 45 18 Z"
+                  fill="#527563"
+                />
+                <path
+                  d="M85 15 C100 0 120 8 110 25 C100 40 75 28 85 15 Z"
+                  fill="#7fa187"
+                />
+                <path
+                  d="M130 12 C145 -3 165 5 155 22 C145 38 120 25 130 12 Z"
+                  fill="#9bbba3"
+                />
+              </g>
+              <!-- Right Foliage Branch -->
+              <g
+                stroke="#4a6b5d"
+                stroke-width="1.2"
+                fill="#6b8e73"
+                fill-opacity="0.45"
+                transform="scale(-1, 1) translate(-600, 0)"
+              >
+                <path
+                  d="M-10 -10 Q50 30 120 15 T250 10"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M15 8 C25 -5 45 0 35 15 C25 30 5 20 15 8 Z"
+                  fill="#88a890"
+                />
+                <path
+                  d="M45 18 C60 5 80 12 70 28 C60 42 35 30 45 18 Z"
+                  fill="#527563"
+                />
+                <path
+                  d="M85 15 C100 0 120 8 110 25 C100 40 75 28 85 15 Z"
+                  fill="#7fa187"
+                />
+                <path
+                  d="M130 12 C145 -3 165 5 155 22 C145 38 120 25 130 12 Z"
+                  fill="#9bbba3"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+         AVISO IMPORTANTE DE ASISTENCIA (ANTES DE CONFIRMAR ASISTENCIA)
+         ------------------------------------------------------------------ -->
+      <section
+        class="notice-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm max-w-xl mx-auto space-y-3 sm:space-y-4"
+      >
+        <!-- Fila Superior: Ícono de Atención + Mensaje Principal -->
+        <div class="flex items-center gap-3 sm:gap-5">
+          <!-- Sello Circular de Alerta -->
+          <div
+            class="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#b25f5a] flex items-center justify-center shadow-sm p-1"
+          >
+            <!-- Círculo interior decorativo blanco -->
+            <div
+              class="w-full h-full rounded-full border border-white/70 flex items-center justify-center"
+            >
+              <span
+                class="text-white font-serif-title font-bold text-2xl sm:text-3xl leading-none select-none"
+                >!</span
+              >
+            </div>
+          </div>
+
+          <!-- Texto del Aviso -->
+          <div class="flex-1 space-y-0.5 sm:space-y-1">
+            <p
+              class="font-serif-title text-stone-800 text-xs sm:text-sm md:text-[15px] font-semibold tracking-wide uppercase leading-tight sm:leading-snug"
+            >
+              Es de vital importancia que confirmes tu asistencia antes del
+              <span class="text-[#a44b46] font-bold">05 de Diciembre</span>,
+            </p>
+            <p
+              class="font-serif-title text-[11px] sm:text-xs md:text-sm text-stone-700 italic leading-snug"
+            >
+              de otra manera tu lugar será asignado a otra persona.
+            </p>
+          </div>
+        </div>
+
+        <!-- Cinta Inferior: Invitación Personal e Intransferible -->
+        <div
+          class="ribbon-banner text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-r-md flex items-center justify-between shadow-sm ml-1 sm:ml-2"
+        >
+          <span
+            class="font-serif-title text-[10px] sm:text-xs md:text-[13px] tracking-wider uppercase font-semibold pl-2 sm:pl-3"
+          >
+            La invitación es personal e intransferible.
+          </span>
+          <svg
+            class="w-4 h-4 sm:w-5 sm:h-5 text-white flex-shrink-0 ml-2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+         REGALOS / ALIAS BANCARIO
+         ------------------------------------------------------------------ -->
+      <section
+        class="bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-stone-200/90 shadow-md max-w-xl mx-auto space-y-4"
+      >
+        <!-- Título con Corazón -->
+        <div class="flex items-start gap-3">
+          <svg
+            class="w-6 h-6 text-[#7a4d32] flex-shrink-0 mt-0.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+          <h4
+            class="font-serif-title text-base sm:text-lg font-bold text-[#6a2b22] leading-snug"
+          >
+            Tu presencia es el mejor regalo que podemos recibir.
+          </h4>
+        </div>
+
+        <!-- Párrafo descriptivo -->
+        <p
+          class="font-serif-title text-sm sm:text-base text-stone-700 leading-relaxed"
+        >
+          Si igualmente querés hacernos un obsequio y te resulta más práctico,
+          podés acompañarnos a través del siguiente alias:
+        </p>
+
+        <!-- Botón interactivo de Alias -->
+        <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+          <button
+            type="button"
+            onclick="copyAlias()"
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3 rounded-2xl bg-[#faf1eb] hover:bg-[#f5e7dd] border border-[#e8d5c8] shadow-sm transition-all group cursor-pointer"
+            title="Toca para copiar el alias"
+          >
+            <!-- Círculo con corazón -->
+            <div
+              class="w-8 h-8 rounded-full border border-[#a87c55] flex items-center justify-center text-[#a87c55] group-hover:scale-105 transition-transform"
+            >
+              <svg
+                class="w-4 h-4 text-[#a87c55]"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </div>
+
+            <!-- Texto del alias -->
+            <span
+              class="font-serif-title text-lg sm:text-xl font-bold text-[#6a2b22] tracking-wide"
+            >
+              Alias:
+              <span class="underline decoration-dotted">Micol.galvan</span>
+            </span>
+
+            <span class="text-xs text-stone-400 group-hover:text-stone-700 ml-1"
+              >📋 Copiar</span
+            >
+          </button>
+
+          <!-- Mensaje de copiado con éxito -->
+          <span
+            id="alias-copied-msg"
+            class="text-xs text-emerald-700 font-semibold opacity-0 transition-opacity duration-300"
+          >
+            ✓ ¡Alias copiado al portapapeles!
+          </span>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+         9. CONFIRMAR ASISTENCIA (VÍA GOOGLE FORMS)
+         ------------------------------------------------------------------ -->
+      <section
+        class="bg-white rounded-3xl p-8 sm:p-10 border border-stone-200/90 shadow-lg max-w-xl mx-auto space-y-6 text-center"
+      >
+        <div class="space-y-1">
+          <span
+            class="text-xs font-semibold text-[#7a4d32] uppercase tracking-[0.2em]"
+            >RSVP</span
+          >
+          <h3
+            class="font-serif-title text-3xl sm:text-4xl font-bold text-stone-800"
+          >
+            Confirmar Asistencia
+          </h3>
+          <p class="text-xs sm:text-sm text-stone-500 font-serif-title italic">
+            Por favor confirma tu presencia para celebrar con nosotros
+          </p>
+        </div>
+
+        <p
+          class="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-md mx-auto"
+        >
+          Para ayudarnos con la organización de nuestra boda, te pedimos que
+          completes el siguiente formulario online con tus datos y preferencias:
+        </p>
+
+        <!-- ============================================================
+             BOTÓN DE GOOGLE FORMS:
+             Pega el enlace de tu Formulario de Google en el atributo href
+             ============================================================ -->
+        <div class="pt-2">
+          <a
+            id="google-form-link"
+            href="https://forms.gle/Gf3g1DmTFvaomJUd9"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#7a4d32] hover:bg-[#633c24] text-white font-semibold text-sm sm:text-base tracking-wide shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer"
+          >
+            <!-- Ícono de Formulario -->
+            <svg
+              class="w-5 h-5 text-amber-200 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span>Completar Formulario de Asistencia</span>
+            <span class="text-amber-200">→</span>
+          </a>
+        </div>
+
+        <div
+          class="flex items-center justify-center gap-2 text-[11px] text-stone-400 font-serif-title pt-1"
+        >
+          <span>⏱️ Toma menos de 1 minuto</span>
+          <span>•</span>
+          <span>🔒 Respuestas privadas</span>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer
+        class="text-center py-8 space-y-2 text-stone-500 border-t border-stone-200/60"
+      >
+        <h4 class="font-script text-4xl text-[#7a4d32]">Micol &amp; Adriel</h4>
+        <p class="text-xs font-serif-title italic">Sábado 19 de Diciembre</p>
+        <p class="text-[10px] text-stone-400">
+          Hecho con ❤️ para nuestro casamiento
+        </p>
+      </footer>
+    </div>
+
+    <!-- Custom Script -->
+    <script src="script.js"></script>
+  </body>
+</html>

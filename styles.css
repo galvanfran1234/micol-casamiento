@@ -1,0 +1,408 @@
+/* Reset & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  color: #4a4a4a;
+  background-color: #f7ede8;
+  background-image: url('./wedding-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.font-serif-title {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.font-script {
+  font-family: 'Alex Brush', cursive;
+}
+
+/* -------------------------------------------------------------
+   ENVELOPE UNBOXING OVERLAY
+   ------------------------------------------------------------- */
+#envelope-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: #f7ede8;
+  background-image: url('./wedding-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  padding: 1rem;
+}
+
+#envelope-screen.opened {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Envelope Container 3D */
+.envelope-box {
+  position: relative;
+  width: 320px;
+  height: 220px;
+  background-color: #b57d54;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 20px 35px -10px rgba(110, 65, 30, 0.35);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  perspective: 800px;
+}
+
+.envelope-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Inner Lining with Foliage */
+.envelope-lining {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background-color: #faf6ee;
+  border-bottom: 1px solid rgba(200, 146, 105, 0.3);
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* Envelope Pocket Folds */
+.envelope-pocket {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+}
+.fold-left {
+  position: absolute;
+  inset: 0;
+  background: #c38b62;
+  clip-path: polygon(0 0, 53% 53%, 0 100%);
+  filter: drop-shadow(2px 0 4px rgba(0, 0, 0, 0.08));
+}
+.fold-right {
+  position: absolute;
+  inset: 0;
+  background: #bc845c;
+  clip-path: polygon(100% 0, 47% 53%, 100% 100%);
+  filter: drop-shadow(-2px 0 4px rgba(0, 0, 0, 0.08));
+}
+.fold-bottom {
+  position: absolute;
+  inset: 0;
+  background: #b1784e;
+  clip-path: polygon(0 100%, 50% 42%, 100% 100%);
+  filter: drop-shadow(0 -4px 6px rgba(0, 0, 0, 0.12));
+}
+
+/* Envelope Top Flap */
+.envelope-flap-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background-color: #ba835a;
+  transform-origin: top center;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s;
+  z-index: 20;
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.envelope-box.open .envelope-flap-top {
+  transform: rotateX(180deg);
+  z-index: 4;
+}
+
+/* Wax Seal Button */
+.wax-seal {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  background: radial-gradient(circle, #a84232 0%, #7d2619 100%);
+  border-radius: 50%;
+  border: 2px solid #c25e4c;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f7e0b5;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  z-index: 25;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.envelope-box.open .wax-seal {
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+
+/* Card Preview Sliding out */
+.card-peek {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 190px;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 8;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.envelope-box.open .card-peek {
+  transform: translateX(-50%) translateY(-140px) scale(1.05);
+  z-index: 8;
+}
+
+/* -------------------------------------------------------------
+   3D CARD FLIP CONTAINER
+   ------------------------------------------------------------- */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+.is-flipped {
+  transform: rotateY(180deg);
+}
+
+/* Ensure 3D card back face receives all touch and click events when flipped */
+.card-face-front {
+  z-index: 2;
+  pointer-events: auto;
+}
+.card-face-back {
+  z-index: 1;
+  pointer-events: none;
+}
+#card-3d.is-flipped .card-face-front {
+  z-index: 1;
+  pointer-events: none;
+}
+#card-3d.is-flipped .card-face-back {
+  z-index: 5;
+  pointer-events: auto;
+}
+
+
+/* -------------------------------------------------------------
+   DISCREET FLOATING MUSIC WIDGET
+   ------------------------------------------------------------- */
+.music-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Volume popup menu */
+.volume-popup {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.25s ease;
+  margin-bottom: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(220, 215, 205, 0.7);
+  border-radius: 9999px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.music-widget:hover .volume-popup,
+.volume-popup.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.music-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(220, 215, 205, 0.7);
+  padding: 4px;
+  border-radius: 9999px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.music-pill:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.music-btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #7a4d32;
+  border: 1px solid #e5e0d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.music-btn-icon:hover {
+  transform: scale(1.05);
+  color: #58331d;
+}
+
+.volume-toggle-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6a6056;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.volume-toggle-btn:hover {
+  background-color: rgba(122, 77, 50, 0.12);
+  color: #7a4d32;
+}
+
+.music-widget.playing .music-btn-icon {
+  animation: pulse-music 2s infinite;
+  background-color: #faf5f0;
+}
+
+.volume-slider {
+  width: 75px;
+  height: 4px;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #e0d8ce;
+  outline: none;
+  cursor: pointer;
+  accent-color: #7a4d32;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #7a4d32;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #7a4d32;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pulse-music {
+  0% { box-shadow: 0 0 0 0 rgba(122, 77, 50, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(122, 77, 50, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(122, 77, 50, 0); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fcf9f2;
+}
+::-webkit-scrollbar-thumb {
+  background: #d8ceb9;
+  border-radius: 4px;
+}
+
+/* -------------------------------------------------------------
+   IMPORTANT NOTICE CARD & RIBBON BANNER
+   ------------------------------------------------------------- */
+.notice-card {
+  background: linear-gradient(135deg, #faece6 0%, #f7e4dc 100%);
+  border: 1px solid #ebd3c8;
+}
+
+.ribbon-banner {
+  background-color: #b25f5a;
+  clip-path: polygon(14px 0%, 100% 0%, 100% 100%, 14px 100%, 0% 50%);
+}
+
+@media (max-width: 640px) {
+  .ribbon-banner {
+    clip-path: polygon(10px 0%, 100% 0%, 100% 100%, 10px 100%, 0% 50%);
+  }
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bdae93;
+}
+li {
+  display: list-item;
+  list-style-type: none;
+  margin-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
