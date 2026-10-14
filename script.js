@@ -1,9 +1,7 @@
 // State Variables
 let isEnvelopeOpened = false;
 let isCardFlipped = false;
-let audioCtx = null;
 let isMusicPlaying = false;
-let synthTimer = null;
 
 // 1. OPEN ENVELOPE UNBOXING ANIMATION
 function openEnvelope() {
@@ -13,14 +11,13 @@ function openEnvelope() {
   const box = document.getElementById('envelope-box');
   const screen = document.getElementById('envelope-screen');
 
-  box.classList.add('open');
-  playChime();
+  if (box) box.classList.add('open');
+  
+  // Mobile audio trigger: Must execute immediately on user gesture
+  playMusic();
 
   setTimeout(() => {
-    screen.classList.add('opened');
-    if (!isMusicPlaying) {
-      toggleMusic();
-    }
+    if (screen) screen.classList.add('opened');
   }, 1200);
 }
 
@@ -74,43 +71,110 @@ function initCountdown() {
   setInterval(update, 1000);
 }
 
-// 4. MP3 BACKGROUND MUSIC PLAYER & VOLUME CONTROL
-let lastVolume = 0.5;
+// 4. MP3 & M4A BACKGROUND MUSIC PLAYER & VOLUME CONTROL
+let lastVolume = 0.6;
+let isUnlockArmed = false;
+
+function updateMusicUI(playing) {
+  const widget = document.getElementById('music-widget');
+  const icon = document.getElementById('music-icon');
+  if (widget) {
+    if (playing) {
+      widget.classList.add('playing');
+    } else {
+      widget.classList.remove('playing');
+    }
+  }
+  if (icon) {
+    icon.innerHTML = playing ? '⏸' : '🎵';
+  }
+}
+
+function playMusic() {
+  const audio = document.getElementById('bg-music');
+  if (!audio) return;
+
+  // Garantizar que no esté muteado y configurar volumen con seguridad (en iOS el volumen es solo por botones físicos)
+  try {
+    audio.muted = false;
+    if (audio.volume === 0) {
+      audio.volume = lastVolume > 0 ? lastVolume : 0.6;
+    }
+  } catch (_) {}
+
+  // Despertar Web Audio AudioContext (técnica estándar en Safari iOS/WebKit para habilitar el subsistema de audio)
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) {
+      if (!window._weddingAudioCtx) {
+        window._weddingAudioCtx = new AudioCtx();
+      }
+      if (window._weddingAudioCtx.state === 'suspended') {
+        window._weddingAudioCtx.resume();
+      }
+    }
+  } catch (_) {}
+
+  // Si ya está sonando, solo sincronizar UI
+  if (!audio.paused) {
+    isMusicPlaying = true;
+    updateMusicUI(true);
+    return;
+  }
+
+  const playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        isMusicPlaying = true;
+        updateMusicUI(true);
+      })
+      .catch((err) => {
+        console.warn('Reproducción de audio pospuesta por política del navegador:', err);
+        isMusicPlaying = false;
+        updateMusicUI(false);
+        // Activar reintento ante el próximo toque del usuario
+        armNextInteractionAudioUnlock();
+      });
+  } else {
+    isMusicPlaying = true;
+    updateMusicUI(true);
+  }
+}
+
+function pauseMusic() {
+  const audio = document.getElementById('bg-music');
+  if (!audio) return;
+
+  audio.pause();
+  isMusicPlaying = false;
+  updateMusicUI(false);
+}
 
 function toggleMusic() {
   const audio = document.getElementById('bg-music');
-  const widget = document.getElementById('music-widget');
-  const icon = document.getElementById('music-icon');
-
   if (!audio) return;
 
-  if (isMusicPlaying) {
-    audio.pause();
-    isMusicPlaying = false;
-    if (widget) widget.classList.remove('playing');
-    if (icon) icon.innerHTML = '🎵';
+  if (!audio.paused) {
+    pauseMusic();
   } else {
-    audio.play().then(() => {
-      isMusicPlaying = true;
-      if (widget) widget.classList.add('playing');
-      if (icon) icon.innerHTML = '⏸';
-    }).catch(err => {
-      console.log('Audio play action queued:', err);
-    });
+    playMusic();
   }
 }
 
 function setVolume(val) {
   const audio = document.getElementById('bg-music');
   const volumeIcon = document.getElementById('volume-icon');
-
   if (!audio) return;
 
   const parsedVal = parseFloat(val);
-  audio.volume = parsedVal;
+  try {
+    audio.volume = parsedVal;
+  } catch (_) {}
+  audio.muted = parsedVal === 0;
 
   if (volumeIcon) {
-    if (parsedVal === 0) {
+    if (parsedVal === 0 || audio.muted) {
       volumeIcon.innerHTML = '🔇';
     } else if (parsedVal < 0.4) {
       volumeIcon.innerHTML = '🔉';
@@ -123,17 +187,21 @@ function setVolume(val) {
 function toggleMute() {
   const audio = document.getElementById('bg-music');
   const slider = document.getElementById('volume-slider');
-
+  const volumeIcon = document.getElementById('volume-icon');
   if (!audio) return;
 
-  if (audio.volume > 0) {
+  if (!audio.muted && audio.volume > 0) {
     lastVolume = audio.volume;
-    setVolume(0);
+    audio.muted = true;
+    try { audio.volume = 0; } catch (_) {}
     if (slider) slider.value = 0;
+    if (volumeIcon) volumeIcon.innerHTML = '🔇';
   } else {
-    const restoreVal = lastVolume > 0 ? lastVolume : 0.5;
-    setVolume(restoreVal);
+    const restoreVal = lastVolume > 0 ? lastVolume : 0.6;
+    audio.muted = false;
+    try { audio.volume = restoreVal; } catch (_) {}
     if (slider) slider.value = restoreVal;
+    if (volumeIcon) volumeIcon.innerHTML = '🔊';
   }
 }
 
@@ -154,21 +222,31 @@ document.addEventListener('click', (event) => {
   }
 });
 
-function playChime() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(1046.50, ctx.currentTime + 0.6);
-    gain.gain.setValueAtTime(0.05, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.6);
-  } catch (e) {}
+// Setup native audio element state listeners
+function setupAudioListeners() {
+  const audio = document.getElementById('bg-music');
+  if (!audio) return;
+
+  audio.addEventListener('play', () => {
+    isMusicPlaying = true;
+    updateMusicUI(true);
+  });
+
+  audio.addEventListener('pause', () => {
+    isMusicPlaying = false;
+    updateMusicUI(false);
+  });
+
+  audio.addEventListener('ended', () => {
+    isMusicPlaying = false;
+    updateMusicUI(false);
+  });
+
+  audio.addEventListener('error', (e) => {
+    console.error('Error en el elemento de audio:', audio.error, e);
+    isMusicPlaying = false;
+    updateMusicUI(false);
+  });
 }
 
 // 5. ADD TO GOOGLE CALENDAR
@@ -226,7 +304,55 @@ function showAliasFeedback() {
   }
 }
 
+// Fallback multi-dispositivo: si el navegador móvil restringió el inicio en el primer tap,
+// se reactiva inmediatamente en la siguiente interacción del usuario (tap/scroll)
+function armNextInteractionAudioUnlock() {
+  if (isUnlockArmed) return;
+  isUnlockArmed = true;
+
+  const unlock = () => {
+    const audio = document.getElementById('bg-music');
+    if (!audio) return;
+
+    if (audio.paused) {
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          isMusicPlaying = true;
+          updateMusicUI(true);
+          cleanup();
+        }).catch(() => {});
+      }
+    } else {
+      cleanup();
+    }
+  };
+
+  function cleanup() {
+    isUnlockArmed = false;
+    ['click', 'touchstart', 'touchend'].forEach((evt) => {
+      document.removeEventListener(evt, unlock, { capture: true });
+    });
+  }
+
+  ['click', 'touchstart', 'touchend'].forEach((evt) => {
+    document.addEventListener(evt, unlock, { capture: true, passive: true });
+  });
+}
+
+// Detección de iPhone para mostrar sugerencia de switch de silencio
+function checkIOS() {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isIOS) {
+    const hint = document.getElementById('iphone-hint');
+    if (hint) hint.classList.remove('hidden');
+  }
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   initCountdown();
+  setupAudioListeners();
+  checkIOS();
 });

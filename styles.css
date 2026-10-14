@@ -63,6 +63,8 @@ body {
   cursor: pointer;
   transition: transform 0.3s ease;
   perspective: 800px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .envelope-box:hover {
@@ -232,8 +234,8 @@ body {
    ------------------------------------------------------------- */
 .music-widget {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  right: calc(20px + env(safe-area-inset-right, 0px));
   z-index: 90;
   display: flex;
   flex-direction: column;
@@ -298,6 +300,8 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .music-btn-icon:hover {
@@ -315,6 +319,8 @@ body {
   color: #6a6056;
   cursor: pointer;
   transition: background 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .volume-toggle-btn:hover {
@@ -325,6 +331,15 @@ body {
 .music-widget.playing .music-btn-icon {
   animation: pulse-music 2s infinite;
   background-color: #faf5f0;
+}
+
+.music-widget:not(.playing) .music-btn-icon {
+  animation: gentle-music-hint 3s infinite ease-in-out;
+}
+
+@keyframes gentle-music-hint {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
 }
 
 .volume-slider {

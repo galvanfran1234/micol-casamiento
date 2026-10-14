@@ -34,6 +34,10 @@
         <p class="text-xs text-stone-500">
           Toca el sobre o el sello para abrir tu invitación
         </p>
+        <p class="text-[11px] text-stone-400 flex items-center justify-center gap-1.5 pt-0.5">
+          <span>🎵</span>
+          <span>Incluye música de fondo</span>
+        </p>
       </div>
 
       <!-- Interactive Envelope Box -->
@@ -87,7 +91,7 @@
 
       <button
         onclick="openEnvelope()"
-        class="mt-8 px-6 py-2.5 bg-stone-800 text-stone-100 rounded-full text-xs font-semibold tracking-wider uppercase shadow-md hover:bg-stone-900 transition-all"
+        class="mt-8 px-6 py-2.5 bg-stone-800 text-stone-100 rounded-full text-xs font-semibold tracking-wider uppercase shadow-md hover:bg-stone-900 transition-all cursor-pointer"
       >
         Abrir Invitación ✉️
       </button>
@@ -99,25 +103,34 @@
     <audio
       id="bg-music"
       loop
-      src="./song/NARUTO%20-%20Sadness%20and%20Sorrow%20(Grand%20Piano%20Cover)%20+%20Sheet%20Music.mp3"
+      playsinline
+      webkit-playsinline
       preload="auto"
-    ></audio>
+    >
+      <source src="./song/wedding-music.m4a" type="audio/mp4" />
+      <source src="./song/wedding-music.mp3" type="audio/mpeg" />
+    </audio>
 
     <div id="music-widget" class="music-widget">
       <!-- Popup Volume Slider Container -->
-      <div id="volume-popup" class="volume-popup">
-        <span class="text-[10px] text-stone-500 font-medium">Volumen</span>
-        <input
-          type="range"
-          id="volume-slider"
-          min="0"
-          max="1"
-          step="0.01"
-          value="0.5"
-          oninput="setVolume(this.value)"
-          title="Ajustar Volumen"
-          class="volume-slider"
-        />
+      <div id="volume-popup" class="volume-popup flex-col !items-start">
+        <div class="flex items-center gap-2 w-full">
+          <span class="text-[10px] text-stone-500 font-medium">Volumen</span>
+          <input
+            type="range"
+            id="volume-slider"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.6"
+            oninput="setVolume(this.value)"
+            title="Ajustar Volumen"
+            class="volume-slider"
+          />
+        </div>
+        <p id="iphone-hint" class="text-[9px] text-stone-400 mt-1 hidden text-center w-full">
+          🔔 Si usas iPhone, desactiva el modo silencio
+        </p>
       </div>
 
       <!-- Main Pill Control -->
